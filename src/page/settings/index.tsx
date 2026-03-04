@@ -1,16 +1,15 @@
 import { Card, Row, Col, Table, Input, Button, Pagination, Popconfirm, Tree } from "antd"
-import type { TableProps } from 'antd';
 import { getAccountList } from "../../api/users";
 import useDataList from "../../hooks/useDataList";
 import type { TreeDataNode, TreeProps } from 'antd';
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import withPermissions from "../../utils/withPermissions";
-interface MenuType{
-    label:string;
-    icon:string;
-    key:string;
-    children?:MenuType[]
+interface MenuType {
+    label: string;
+    icon: string;
+    key: string;
+    children?: MenuType[]
 }
 interface DataType {
     id: number;
@@ -118,13 +117,13 @@ const treeData: TreeDataNode[] = [
     },
 ];
 
-function extractTreeKeys(data:any){
-    let keys:string[]=[];
-    data.forEach((item:any)=>{
-        if(item.children&&item.children.length>0){
-            const childKeys:string[]=extractTreeKeys(item.children);
-            keys=keys.concat(childKeys)
-        }else{
+function extractTreeKeys(data: any) {
+    let keys: string[] = [];
+    data.forEach((item: any) => {
+        if (item.children && item.children.length > 0) {
+            const childKeys: string[] = extractTreeKeys(item.children);
+            keys = keys.concat(childKeys)
+        } else {
             keys.push(item.key)
         }
     })
@@ -134,15 +133,15 @@ function extractTreeKeys(data:any){
 
 
 function Settings() {
-    const AuthButton:React.FC<any>=withPermissions(['delete'],JSON.parse(sessionStorage.getItem("btnAuth") as string))(Button)
+    const AuthButton: React.FC<any> = withPermissions(['delete'], JSON.parse(sessionStorage.getItem("btnAuth") as string))(Button)
 
-    const edit=(menu:MenuType[],accountName:string)=>{
-            setAccountName(accountName);
-           const newCheckedKeys=extractTreeKeys(menu) 
-            setCheckedKeys(newCheckedKeys)
+    const edit = (menu: MenuType[], accountName: string) => {
+        setAccountName(accountName);
+        const newCheckedKeys = extractTreeKeys(menu)
+        setCheckedKeys(newCheckedKeys)
     }
 
-    const columns= [
+    const columns = [
         {
             title: "No.",
             key: "index",
@@ -176,9 +175,9 @@ function Settings() {
         {
             title: "操作",
             key: "operate",
-            render(value:string, record:any) {
+            render(value: string, record: any) {
                 return <>
-                    <Button size="small" type="primary" className="mr" onClick={()=>edit(record.menu,record.accountName)}>修改权限</Button>
+                    <Button size="small" type="primary" className="mr" onClick={() => edit(record.menu, record.accountName)}>修改权限</Button>
                     <Popconfirm
                         title="操作提示"
                         description="确认要删除当前账号吗？"
@@ -193,22 +192,22 @@ function Settings() {
             }
         }
     ]
-    const [accountName,setAccountName]=useState<string>("当前用户")
-    const {menuList}=useSelector((state:any)=>state.authSlice)
-    const [checkedKeys,setCheckedKeys]=useState<React.Key[]>([])
-    const { dataList, page, pageSize, total, loading, formData, setDataList, setPage, setPageSize, setTotal, setLoading, setFormData, loadData, onChange, handleChange, reset } = useDataList<SearchType, DataType>({ accountName: "" }, getAccountList)
-   
-    useEffect(()=>{
+    const [accountName, setAccountName] = useState<string>("当前用户")
+    const { menuList } = useSelector((state: any) => state.authSlice)
+    const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([])
+    const { dataList, page, pageSize, total, loading, formData, onChange, handleChange } = useDataList<SearchType, DataType>({ accountName: "" }, getAccountList)
+
+    useEffect(() => {
         setCheckedKeys(extractTreeKeys(menuList))
-    },[])
-   
-    const handle=()=>{
-        console.log(checkedKeys,accountName)
+    }, [menuList])
+
+    const handle = () => {
+        console.log(checkedKeys, accountName)
     }
-   const onCheck:TreeProps['onCheck']=(checkedKeys)=>{
-    setCheckedKeys(checkedKeys as React.Key[])
-   }
-   return <div>
+    const onCheck: TreeProps['onCheck'] = (checkedKeys) => {
+        setCheckedKeys(checkedKeys as React.Key[])
+    }
+    return <div>
         <Card>
             <Row gutter={16}>
                 <Col span={8}>
@@ -226,7 +225,7 @@ function Settings() {
 
         <Row gutter={16} className="mt">
             <Col span={8} >
-                <Card title={accountName+":所拥权限"}>
+                <Card title={accountName + ":所拥权限"}>
                     <Tree
                         checkable
                         treeData={treeData}
@@ -243,7 +242,7 @@ function Settings() {
                         onConfirm={handle}
                     >
                         <Button type="primary">提交修改</Button>
-                    </Popconfirm> 
+                    </Popconfirm>
                 </Card>
             </Col>
 

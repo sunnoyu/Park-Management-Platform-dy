@@ -25,6 +25,7 @@ function UserForm(props: FormProps) {
     }
     useEffect(() => {
         title === "新增企业" ? form.resetFields() : form.setFieldsValue(userData)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [visible])
     return <>
         <Modal

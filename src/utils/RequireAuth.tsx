@@ -18,6 +18,7 @@ function RequireAuth({ allowed, redirectTo, children }: Iprops) {
         if (allowed !== isLogin) {
             navigate(redirectTo)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [allowed, isLogin, redirectTo])
 
     return allowed === isLogin ? <>{children}</> : <></>

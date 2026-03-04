@@ -1,11 +1,11 @@
 import React from "react";
-import { Card, Row, Col, Input, Button, Table, Pagination,Tag,Popconfirm,message  } from "antd"
+import { Card, Row, Col, Input, Button, Table, Pagination, Tag, Popconfirm, message } from "antd"
 import type { TableProps } from 'antd';
-import { useState, useEffect, useMemo,useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import type { DataType } from "./interface";
 import { getUserList } from "../../api/userList";
 import type { PaginationProps } from 'antd';
-import { deleteUser,batchDeleteUser } from "../../api/userList";
+import { deleteUser, batchDeleteUser } from "../../api/userList";
 import UserForm from "./userForm";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../store/user/userSlice";
@@ -23,22 +23,23 @@ function Users() {
     const [total, setTotal] = useState<number>(0)
     const [loading, setLoading] = useState<boolean>(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const [isModalOpen,setIsModalOpen]=useState<boolean>(false)
-    const [title,setTitle]=useState<string>("")
-    const dispatch=useDispatch()
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    const [title, setTitle] = useState<string>("")
+    const dispatch = useDispatch()
     const [formData, setFormData] = useState<searchType>({
         companyName: "",
         contact: "",
         phone: ""
     })
-   
-   const disabled= useMemo(()=>{
-        return selectedRowKeys.length?false:true
-    },[selectedRowKeys])
+
+    const disabled = useMemo(() => {
+        return selectedRowKeys.length ? false : true
+    }, [selectedRowKeys])
 
     useEffect(() => {
         loadData()
-    }, [page,pageSize])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page, pageSize])
 
     const loadData = async () => {
         setLoading(true)
@@ -62,44 +63,44 @@ function Users() {
         selectedRowKeys,
         onChange: onSelectChange
     }
-    const onChange:PaginationProps['onChange']=(page,pageSize)=>{
-       setPage(page)
-       setPageSize(pageSize);
+    const onChange: PaginationProps['onChange'] = (page, pageSize) => {
+        setPage(page)
+        setPageSize(pageSize);
     }
-    const reset=()=>{
+    const reset = () => {
         setSelectedRowKeys([]);
-        setFormData({ companyName: "",contact: "",phone: ""})
+        setFormData({ companyName: "", contact: "", phone: "" })
         setPage(1)
         setPageSize(10);
         loadData()
 
     }
-    const confirm=async function(id:string){
-      const {data}= await  deleteUser(id);
-      message.success(data);
-      loadData();
-     
+    const confirm = async function (id: string) {
+        const { data } = await deleteUser(id);
+        message.success(data);
+        loadData();
+
     }
-    const batchDelete=async ()=>{
-        const {data}=await batchDeleteUser(selectedRowKeys)
+    const batchDelete = async () => {
+        const { data } = await batchDeleteUser(selectedRowKeys)
         message.success(data);
         loadData();
     }
-    const edit=(record:DataType)=>{
+    const edit = (record: DataType) => {
         setIsModalOpen(true);
         setTitle("编辑企业");
         dispatch(setUserData(record))
     }
 
-    const add=()=>{
+    const add = () => {
         setIsModalOpen(true);
         setTitle("新增企业");
         dispatch(setUserData({}))
     }
 
-    const hideModal=useCallback(()=>{
+    const hideModal = useCallback(() => {
         setIsModalOpen(false)
-    },[])
+    }, [])
 
     const columns: TableProps<DataType>['columns'] = [
         {
@@ -118,12 +119,12 @@ function Users() {
             title: "经营状态",
             key: "status",
             dataIndex: "status",
-            render(value){
-                if(value==1){
+            render(value) {
+                if (value === 1) {
                     return <Tag color="green">营业中</Tag>
-                }else if(value==2){
+                } else if (value === 2) {
                     return <Tag color="#f50">暂停营业</Tag>
-                }else if(value==3){
+                } else if (value === 3) {
                     return <Tag color="red">已关闭</Tag>
                 }
             }
@@ -168,24 +169,24 @@ function Users() {
             key: "operate",
             render(value, record, index) {
                 return <>
-                    <Button type="primary" size="small" onClick={()=>edit(record)}>编辑</Button>
-                    <Popconfirm 
+                    <Button type="primary" size="small" onClick={() => edit(record)}>编辑</Button>
+                    <Popconfirm
                         title="删除确认"
                         description="确定要删除吗？"
                         okText="是"
                         cancelText="否"
-                        onConfirm={()=>confirm(record.id)}
+                        onConfirm={() => confirm(record.id)}
                     >
-                         <Button type="primary" danger className="ml" size="small" >删除</Button>
+                        <Button type="primary" danger className="ml" size="small" >删除</Button>
                     </Popconfirm>
-                   
+
                 </>
             },
         },
-    
+
     ];
     return <div className="users">
-        <MyUserForm visible={isModalOpen} hideModal={hideModal} title={title} loadData={loadData}/>
+        <MyUserForm visible={isModalOpen} hideModal={hideModal} title={title} loadData={loadData} />
         <Card className="search">
             <Row gutter={16}>
                 <Col span={7}>
@@ -233,6 +234,6 @@ function Users() {
     </div>
 }
 
-const MyUserForm=React.memo(UserForm)
+const MyUserForm = React.memo(UserForm)
 export default Users
 

@@ -1,6 +1,4 @@
-import { Card } from "antd"
-import { Descriptions, Row, Col, Calendar, Avatar, List, Tag, Progress, Badge } from 'antd';
-import type { DescriptionsProps } from 'antd';
+import { Card, Row, Col, Calendar, Avatar, List, Tag, Progress, Badge } from 'antd';
 const data = [
     {
         title: 'Ant Design Title 1',

@@ -48,9 +48,9 @@ const columns: TableProps<DataType>['columns'] = [
         dataIndex: 'status',
         key: 'status',
         render: (text, record) => {
-            if (text == 1) {
+            if (text === 1) {
                 return <Tag color="#f50">待维修</Tag>
-            } else if (text == 2) {
+            } else if (text === 2) {
                 return <Tag color="#2db7f5">维修中</Tag>
             } else {
                 return <Tag color="green">已完成</Tag>
@@ -67,11 +67,11 @@ const columns: TableProps<DataType>['columns'] = [
         dataIndex: 'operate',
         key: 'operate',
         render: (text, record) => {
-            if (record.status == "1") {
+            if (record.status === "1") {
                 return <>
                     <Button type="primary" size="small">指派</Button>
                 </>
-            } else if (record.status == "2") {
+            } else if (record.status === "2") {
                 return <>
                     <a >维修中...</a>
                 </>

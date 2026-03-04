@@ -1,5 +1,5 @@
 import type { FormProps } from 'antd';
-import { Button, Checkbox, Form, Input, Card, DatePicker, Radio} from 'antd';
+import { Button, Form, Input, Card, DatePicker, Radio} from 'antd';
 
 type FieldType = {
     username?: string;
